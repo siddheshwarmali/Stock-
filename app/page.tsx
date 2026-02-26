@@ -58,26 +58,15 @@ export default function Page() {
     setCandles(json.candles);
   }
 
-  // initial
-  useEffect(() => {
-    runScan();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useEffect(() => { runScan(); }, []);
+  useEffect(() => { loadCandles(picked); }, [picked, interval]);
 
-  // load picked candles when changed
-  useEffect(() => {
-    loadCandles(picked);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [picked, interval]);
-
-  // polling
   useEffect(() => {
     const id = setInterval(() => {
       runScan();
       loadCandles(picked);
     }, Math.max(5, refreshSec) * 1000);
     return () => clearInterval(id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [picked, interval, refreshSec]);
 
   const ema9 = useMemo(() => emaSeries(candles, 9), [candles]);
@@ -89,29 +78,17 @@ export default function Page() {
       <div className="header">
         <div>
           <div className="title">📈 Stock Analyzer (Vercel-ready)</div>
-          <div className="small">
-            Data source: <b>{source || '...'}</b> • Refresh: every <b>{refreshSec}s</b>
-          </div>
+          <div className="small">Data source: <b>{source || '...'}</b> • Refresh: every <b>{refreshSec}s</b></div>
         </div>
         <div className="row">
-          <button className="button secondary" onClick={runScan} disabled={loading}>
-            {loading ? 'Scanning…' : 'Scan now'}
-          </button>
-          <button className="button" onClick={() => loadCandles(picked)}>
-            Refresh chart
-          </button>
+          <button className="button secondary" onClick={runScan} disabled={loading}>{loading ? 'Scanning…' : 'Scan now'}</button>
+          <button className="button" onClick={() => loadCandles(picked)}>Refresh chart</button>
         </div>
       </div>
 
       <div className="card" style={{ marginBottom: 14 }}>
         <div className="row">
-          <input
-            className="input"
-            style={{ flex: 1, minWidth: 260 }}
-            value={symbols}
-            onChange={(e) => setSymbols(e.target.value)}
-            placeholder="Symbols comma separated e.g. IBM,MSFT,AAPL"
-          />
+          <input className="input" style={{ flex: 1, minWidth: 260 }} value={symbols} onChange={(e) => setSymbols(e.target.value)} placeholder="Symbols comma separated e.g. IBM,MSFT,AAPL" />
 
           <select value={interval} onChange={(e) => setInterval(e.target.value)}>
             <option value="1min">1min</option>
@@ -132,37 +109,28 @@ export default function Page() {
           <button className="button" onClick={runScan}>Apply</button>
           <span className="badge">Max 25 symbols</span>
         </div>
-        <div className="small" style={{ marginTop: 8 }}>
-          Score is rule-based: Trend + Momentum + Volume + Breakout + Volatility sanity.
-        </div>
+        <div className="small" style={{ marginTop: 8 }}>Score is rule-based: Trend + Momentum + Volume + Breakout + Volatility sanity.</div>
       </div>
 
       <div className="grid">
         <div className="card">
           <Chart symbol={picked} candles={candles} ema9={ema9} ema21={ema21} ema50={ema50} />
-          <div className="small" style={{ marginTop: 10 }}>
-            ⚠️ If you see <b>demo</b> source, add <code>ALPHAVANTAGE_API_KEY</code> in Vercel env vars.
-          </div>
+          <div className="small" style={{ marginTop: 10 }}>⚠️ If you see <b>demo</b> source, add <code>ALPHAVANTAGE_API_KEY</code> in Vercel env vars.</div>
         </div>
-
         <div className="card">
           <Scanner results={scan} picked={picked} onPick={setPicked} />
           {scan.find(s => s.symbol === picked) ? (
             <div style={{ marginTop: 12 }}>
               <div style={{ fontWeight: 800, marginBottom: 6 }}>Reasons</div>
               <ul className="small" style={{ margin: 0, paddingLeft: 18 }}>
-                {scan.find(s => s.symbol === picked)!.reasons.slice(0, 6).map((r, i) => (
-                  <li key={i}>{r}</li>
-                ))}
+                {scan.find(s => s.symbol === picked)!.reasons.slice(0, 6).map((r, i) => (<li key={i}>{r}</li>))}
               </ul>
             </div>
           ) : null}
         </div>
       </div>
 
-      <div className="small" style={{ marginTop: 18, opacity: 0.9 }}>
-        Built for Vercel: Next.js + API routes. For true tick-by-tick streaming you typically need a broker WebSocket backend.
-      </div>
+      <div className="small" style={{ marginTop: 18, opacity: 0.9 }}>Built for Vercel: Next.js + API routes. For true tick-by-tick streaming you typically need a broker WebSocket backend.</div>
     </main>
   );
 }
