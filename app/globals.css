@@ -1,0 +1,121 @@
+
+:root {
+  --bg: #0b1220;
+  --panel: #101a2f;
+  --text: #e6edf7;
+  --muted: #9bb0cf;
+  --accent: #4ea1ff;
+  --good: #31d0aa;
+  --warn: #ffcc66;
+  --bad: #ff5b6e;
+  --border: rgba(255,255,255,.08);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: radial-gradient(1200px 900px at 20% 0%, #121f3c, var(--bg));
+  color: var(--text);
+}
+
+a { color: var(--accent); text-decoration: none; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.input, select {
+  background: rgba(0,0,0,.25);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+}
+
+.button {
+  background: linear-gradient(180deg, rgba(78,161,255,.95), rgba(78,161,255,.65));
+  border: none;
+  color: #07101f;
+  font-weight: 700;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.button.secondary {
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.score {
+  font-weight: 800;
+}
+
+.score.good { color: var(--good); }
+.score.warn { color: var(--warn); }
+.score.bad { color: var(--bad); }
+
+.small { color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+.chartWrap { height: 560px; }
+
+@media (max-width: 980px) {
+  .grid { grid-template-columns: 1fr; }
+  .chartWrap { height: 520px; }
+}
