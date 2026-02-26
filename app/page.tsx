@@ -16,7 +16,7 @@ const defaultInterval = (process.env.NEXT_PUBLIC_DEFAULT_INTERVAL || '5min');
 
 export default function Page() {
   const [symbols, setSymbols] = useState(defaultSymbols.join(', '));
-  const [interval, setInterval] = useState(defaultInterval);
+  const [interval, setIntervalValue] = useState(defaultInterval);
   const [refreshSec, setRefreshSec] = useState(15);
   const [picked, setPicked] = useState(defaultSymbols[0] || 'IBM');
 
@@ -62,11 +62,11 @@ export default function Page() {
   useEffect(() => { loadCandles(picked); }, [picked, interval]);
 
   useEffect(() => {
-    const id = setInterval(() => {
+    const id = window.setInterval(() => {
       runScan();
       loadCandles(picked);
     }, Math.max(5, refreshSec) * 1000);
-    return () => clearInterval(id);
+    return () => window.clearInterval(id);
   }, [picked, interval, refreshSec]);
 
   const ema9 = useMemo(() => emaSeries(candles, 9), [candles]);
@@ -90,7 +90,7 @@ export default function Page() {
         <div className="row">
           <input className="input" style={{ flex: 1, minWidth: 260 }} value={symbols} onChange={(e) => setSymbols(e.target.value)} placeholder="Symbols comma separated e.g. IBM,MSFT,AAPL" />
 
-          <select value={interval} onChange={(e) => setInterval(e.target.value)}>
+          <select value={interval} onChange={(e) => setIntervalValue(e.target.value)}>
             <option value="1min">1min</option>
             <option value="5min">5min</option>
             <option value="15min">15min</option>
